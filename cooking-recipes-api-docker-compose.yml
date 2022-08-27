@@ -1,0 +1,13 @@
+version: '2.6'
+services:
+  cooking-recipes-api:
+    image: cooking-recipes-api-image
+    ports:
+      - 9898:9898
+    environment:
+      - DATABASE_NAME=cooking_recipes
+      - DATABASE_HOST=172.17.0.1
+      - DATABASE_PORT=3006
+      - DATABASE_PASSWORD=AjboyIan_321
+    volumes:
+      - ./:/app
