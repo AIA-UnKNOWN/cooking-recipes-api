@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const { User } = require('@models');
 
 module.exports = async (req, res) => {
@@ -23,13 +24,23 @@ module.exports = async (req, res) => {
       });
       return;
     }
-    res.status(200).json({
-      message: 'successfully logged in',
-      data: existingUser,
-    });
+    const token = jwt.sign(
+      { userId: existingUser.id },
+      process.env.JWT_SECRET_TOKEN,
+    );
+    res
+      .cookie('token', token, { httpOnly: true })
+      .status(200).json({
+        message: 'successfully logged in',
+        data: {
+          id: existingUser?.id,
+          email: existingUser?.email,
+          username: existingUser?.username,
+        },
+      });
   } catch(error) {
     res.status(500).json({
-      message: error.message,
+      message: error.message || 'sign in error',
     });
   }
 }
