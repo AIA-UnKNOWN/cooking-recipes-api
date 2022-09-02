@@ -12,14 +12,14 @@ module.exports = async (req, res) => {
     const { email, password } = req.body || {};
     const existingUser = await checkExistingUserByEmail(email);
     if (!existingUser) {
-      res.status(500).json({
+      res.status(401).json({
         message: "invalid email or password"
       });
       return;
     }
     const { result } = await checkPassword(password, existingUser.password);
     if (existingUser && !result) {
-      res.status(500).json({
+      res.status(401).json({
         message: "invalid email or password"
       });
       return;
