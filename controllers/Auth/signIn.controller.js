@@ -49,8 +49,8 @@ const validateSignIn = (req, res) => {
   const { email, password } = req.body || {};
   const error = {};
   const emailPattern = /(@[a-z]+.[a-z]+)$/;
-  if (email === '') error.email = 'Email is required';
-  if (password === '') error.password = 'Password is required';
+  if (!email || email === '') error.email = 'Email is required';
+  if (!password || password === '') error.password = 'Password is required';
   if (email !== '' && !emailPattern.test(email)) error.email = `Not a valid email`;
   
   return {
