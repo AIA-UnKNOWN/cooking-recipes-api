@@ -7,6 +7,8 @@ const PORT = process.env.PORT || 9898;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use('/videos', express.static('storage/videos'));
+app.use('/images', express.static('storage/images'));
 
 app.get('/', (req, res) => {
   res.json({
