@@ -5,6 +5,11 @@ const Recipe = require('@controllers/Recipe');
 
 router
   .post(
+    '/create',
+    upload().single('recipe-video'),
+    Recipe.createController
+  )
+  .post(
     '/upload',
     upload().single('recipe-video'),
     Recipe.uploadController
