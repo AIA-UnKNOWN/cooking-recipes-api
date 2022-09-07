@@ -1,5 +1,5 @@
-const createController = require('./createController');
+const uploadController = require('./uploadController');
 
 module.exports = {
-  createController,
+  uploadController,
 }

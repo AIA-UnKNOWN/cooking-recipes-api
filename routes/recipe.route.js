@@ -7,7 +7,7 @@ router
   .post(
     '/upload',
     upload().single('recipe-video'),
-    Recipe.createController
+    Recipe.uploadController
   )
 
 module.exports = router;
