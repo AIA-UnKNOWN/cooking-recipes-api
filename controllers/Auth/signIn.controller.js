@@ -36,6 +36,7 @@ module.exports = async (req, res) => {
           id: existingUser?.id,
           email: existingUser?.email,
           username: existingUser?.username,
+          token,
         },
       });
   } catch(error) {
