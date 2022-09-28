@@ -1,0 +1,1 @@
+docker compose -f cooking-recipes-api-docker-compose.yml up
