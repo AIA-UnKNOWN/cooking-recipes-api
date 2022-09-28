@@ -14,6 +14,7 @@ router
     upload().single('recipe-video'),
     Recipe.uploadController
   )
-  .get('/:recipeId', Recipe.findOneController);
+  .get('/:recipeId', Recipe.findOneController)
+  .get('/all/:userId', Recipe.findAllController)
 
 module.exports = router;
