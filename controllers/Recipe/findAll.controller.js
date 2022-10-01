@@ -1,4 +1,4 @@
-const { Recipe } = require('@models');
+const { Recipe, Upload } = require('@models');
 
 module.exports = async (req, res) => {
   const { userId } = req.params;
@@ -6,6 +6,9 @@ module.exports = async (req, res) => {
   try {
     const recipes = await Recipe.findAll({
       user_id: userId,
+      include: {
+        model: Upload,
+      }
     });
     res.status(200).json({
       message: 'Successfully retrieved a recipe',
