@@ -2,28 +2,20 @@ const jwt = require('jsonwebtoken');
 const { User } = require('@models');
 
 module.exports = async (req, res, next) => {
-  if (req?.cookies?.token !== '') {
+  if (req?.headers?.authorization !== '') {
     try {
-      const { userId } = await verifyUser(req.cookies.token);
-      if (userId) {
-        const user = await User.findOne({ where: { id: userId } });
-        res
-          .cookie('token', req.cookies.token, { httpOnly: true })
-          .status(200).json({
-            message: 'successfully logged in',
-            data: {
-              id: user?.id,
-              email: user?.email,
-              username: user?.username,
-            },
-          });
-        return;
-      }
+      /**
+       * Example bearer token -> 'Bearer abcdefg...-/|12345++<>xyz'
+       */
+      const bearerToken = req.headers.authorization.split(' ')[1];
+      authenticateWithAuthToken({ authToken: bearerToken, res, next});
     } catch(error) {
-      res.clearCookie('token');
+      res.clearCookie('auth-token');
+      next();
     }
+  } else {
+    next();
   }
-  next();
 }
 
 const verifyUser = token => new Promise((resolve, reject) => {
@@ -34,3 +26,25 @@ const verifyUser = token => new Promise((resolve, reject) => {
     reject({ error: error.message });
   }
 });
+
+const authenticateWithAuthToken = async ({ authToken, res, next }) => {
+  try {
+    const { userId } = await verifyUser(authToken);
+    const user = await User.findOne({ where: { id: userId } });
+    res
+      .cookie('auth-token', authToken, { httpOnly: true })
+      .status(200)
+      .json({
+        message: 'successfully logged in',
+        data: {
+          id: user?.id,
+          email: user?.email,
+          username: user?.username,
+          token: authToken,
+        },
+      });
+  } catch(error) {
+    console.log("authTokenError", error);
+    next();
+  }
+}
