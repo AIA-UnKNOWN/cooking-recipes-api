@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "baseUrl": ".",
+    "paths": {
+      "@controllers/*": ["./controllers/*"],
+      "@controllers": ["./controllers"],
+      "@middlewares/*": ["./middlewares/*"],
+      "@middlewares": ["./middlewares/index.js"],
+      "@models/*": ["./models/*"],
+      "@models": ["./models/index.js"],
+      "@routes/*": ["./routes/*"],
+      "@routes": ["./routes"],
+      "@views/*": ["./views/*"],
+      "@views": ["./views"],
+    }
+  },
+}
