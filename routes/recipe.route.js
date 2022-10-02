@@ -16,5 +16,6 @@ router
   )
   .get('/:recipeId', Recipe.findOneController)
   .get('/all/:userId', Recipe.findAllController)
+  .delete('/:recipeId', Recipe.deleteController)
 
 module.exports = router;
