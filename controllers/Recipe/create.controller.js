@@ -1,5 +1,4 @@
-const { Recipe } = require('@models');
-const { Upload } = require('@models');
+const { Recipe, Upload } = require('@models');
 const { getFileBasePathByMimeType } = require('@middlewares/FileUpload/helpers');
 
 module.exports = async (req, res) => {
@@ -19,8 +18,10 @@ module.exports = async (req, res) => {
     }
     res.status(201).json({
       message: 'Successfully created a recipe',
-      data: newlyCreatedRecipe,
-      file: uploadedFile || null,
+      data: {
+        ...newlyCreatedRecipe,
+        Uploads: [uploadedFile],
+      },
     });
   } catch(error) {
     res.status(500).json({
