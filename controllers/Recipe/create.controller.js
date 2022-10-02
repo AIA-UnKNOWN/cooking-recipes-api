@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
     res.status(201).json({
       message: 'Successfully created a recipe',
       data: {
-        ...newlyCreatedRecipe,
+        ...JSON.parse(JSON.stringify(newlyCreatedRecipe)),
         Uploads: [uploadedFile],
       },
     });
