@@ -1,5 +1,4 @@
 'use strict';
-const { Deferrable } = require('sequelize');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -26,9 +25,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key: 'id',
-          deferrable: Deferrable.INITIALLY_IMMEDIATE,
+          id: 'key',
+          deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
         },
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,

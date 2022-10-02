@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       Upload.belongsTo(Recipe, {
         sourceKey: 'id',
         foreignKey: 'recipe_id',
+        onDelete: 'CASCADE',
       });
     }
   }
@@ -28,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.NUMBER,
       references: {
         model: Recipe,
-        key: 'id',
+        id: 'key',
         deferrable: Deferrable.INITIALLY_IMMEDIATE,
       },
     },

@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.NUMBER,
       references: {
         model: User,
-        key: 'id',
+        id: 'key',
         deferrable: Deferrable.INITIALLY_IMMEDIATE,
       },
     },
