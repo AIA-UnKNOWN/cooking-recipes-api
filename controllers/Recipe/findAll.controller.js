@@ -8,7 +8,10 @@ module.exports = async (req, res) => {
       user_id: userId,
       include: {
         model: Upload,
-      }
+      },
+      order: [
+        ['id', 'DESC'],
+      ],
     });
     res.status(200).json({
       message: 'Successfully retrieved a recipe',
