@@ -17,5 +17,6 @@ router
   .get('/:recipeId', Recipe.findOneController)
   .get('/all/:userId', Recipe.findAllController)
   .delete('/:recipeId', Recipe.deleteController)
+  .put('/:recipeId/update', Recipe.updateController)
 
 module.exports = router;
