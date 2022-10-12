@@ -6,7 +6,10 @@ const Recipe = require('@controllers/Recipe');
 router
   .post(
     '/create',
-    upload().single('recipe-video'),
+    upload().fields([
+      { name: 'recipe-thumbnail', maxCount: 1 },
+      { name: 'recipe-video', maxCount: 1 },
+    ]),
     Recipe.createController
   )
   .post(

@@ -9,25 +9,33 @@ module.exports = async (req, res) => {
       description: description || null,
       user_id: userId,
     });
-    let uploadedFile = null;
-    if (req.file) {
-      uploadedFile = await uploadFile({
-        file: req.file,
-        recipeId: newlyCreatedRecipe.id,
-      });
-    }
+    await storeUploadedFiles(req.files, newlyCreatedRecipe.id);
     res.status(201).json({
       message: 'Successfully created a recipe',
-      data: {
-        ...JSON.parse(JSON.stringify(newlyCreatedRecipe)),
-        Uploads: [uploadedFile],
-      },
+      data: newlyCreatedRecipe,
     });
   } catch(error) {
     res.status(500).json({
       error: error.message || 'An error occured while creating a recipe'
     });
   }
+}
+
+const storeUploadedFiles = async (files, recipeId) => {
+  return new Promise((resolve, reject) => {
+    if (Object.keys(files).length > 0) {
+      const uploadedFiles = [];
+      Object.keys(files).forEach(async fieldName => {
+        const uploadedFile = await uploadFile({
+          file: files?.[fieldName]?.[0],
+          recipeId,
+        });
+      });
+      resolve({ uploads: uploadedFiles });
+    } else {
+      reject({ uploads: [] });
+    }
+  });
 }
 
 const uploadFile = async ({ file, recipeId }) => {
