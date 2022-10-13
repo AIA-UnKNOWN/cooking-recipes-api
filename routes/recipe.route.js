@@ -18,7 +18,7 @@ router
     Recipe.uploadController
   )
   .get('/:recipeId', Recipe.findOneController)
-  .get('/all/:userId', Recipe.findAllController)
+  .post('/all/:userId', Recipe.findAllController)
   .delete('/:recipeId', Recipe.deleteController)
   .put('/:recipeId/update', Recipe.updateController)
 
