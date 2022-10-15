@@ -16,7 +16,8 @@
     "@middlewares": "./middlewares",
     "@models": "./models",
     "@routes": "./routes",
-    "@storage": "./storage"
+    "@storage": "./storage",
+    "@helpers": "./helpers"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
