@@ -1,29 +1,33 @@
+const sequelize = require('sequelize');
 const { Recipe, Upload } = require('@models');
+const paginate = require('@helpers/paginate');
 
 module.exports = async (req, res) => {
   const { userId } = req.params;
 
-  const { offset, limit, recordsPerPage, meta } = paginate(req.body);
-
+  const pagination = paginate(req.body);
   try {
-    const recipes = await Recipe.findAll({
-      user_id: userId,
+    const condition = {
+      where: {
+        user_id: userId,
+      },
       include: {
         model: Upload,
       },
       order: [
         ['id', 'DESC'],
       ],
-      offset,
-      limit,
-    });
-    const recipesCount = recipes.map(recipe => recipe.dataValues).length;
+      offset: pagination.offset || undefined,
+      limit: pagination.limit || undefined,
+    }
+    const recipes = await Recipe.findAll(condition);
+    const recipesCount = recipes?.map(recipe => recipe.dataValues)?.length || 0;
     res.status(200).json({
       message: 'Successfully retrieved a recipe',
       meta: {
-        ...meta,
-        nextOffset: recipesCount < recordsPerPage ? undefined : meta.nextOffset,
-        nextLimit: recipesCount < recordsPerPage ? undefined : meta.nextLimit,
+        ...pagination.meta || {},
+        prevOffset: pagination.prevOffset > 0 ? pagination.prevOffset : undefined,
+        prevLimit: pagination.prevLimit > 0 ? pagination.prevLimit : undefined,
       },
       data: recipes,
     });
@@ -32,21 +36,4 @@ module.exports = async (req, res) => {
       error: error.message || 'An error occured while finding all recipes'
     });
   }
-}
-
-const paginate = body => {
-  const { pagination } = body || {};
-  let offset = pagination.offset || 0;
-  let limit = pagination.limit || 5;
-  const recordsPerPage = pagination.limit - pagination.offset;
-  const prevOffset = pagination.offset - recordsPerPage;
-  const prevLimit = pagination.limit - recordsPerPage;
-  let meta = {
-    nextOffset: pagination.offset + recordsPerPage,
-    nextLimit: pagination.limit + recordsPerPage,
-    prevOffset: prevOffset > 0 ? prevOffset : undefined,
-    prevLimit: prevLimit > 0 ? prevLimit : undefined,
-  };
-
-  return { offset, limit, recordsPerPage, meta };
 }
