@@ -26,8 +26,8 @@ module.exports = async (req, res) => {
       message: 'Successfully retrieved a recipe',
       meta: {
         ...pagination.meta || {},
-        prevOffset: pagination.prevOffset > 0 ? pagination.prevOffset : undefined,
-        prevLimit: pagination.prevLimit > 0 ? pagination.prevLimit : undefined,
+        currentOffset: pagination?.offset || undefined,
+        limit: pagination?.limit || undefined,
       },
       data: recipes,
     });
