@@ -1,10 +1,11 @@
 const sequelize = require('sequelize');
+const { Op } = sequelize;
 const { Recipe, Upload } = require('@models');
 const paginate = require('@helpers/paginate');
 
 module.exports = async (req, res) => {
   const { userId } = req.params;
-
+  const { searchKey } = req.body;
   const pagination = paginate(req.body);
   try {
     const condition = {
@@ -20,8 +21,16 @@ module.exports = async (req, res) => {
       offset: pagination.offset || undefined,
       limit: pagination.limit || undefined,
     }
+    if (searchKey) {
+      condition.where = {
+        [Op.or]: [
+          { name: { [Op.like]: `%${searchKey}%` } },
+          { description: { [Op.like]: `%${searchKey}%` } },
+        ],
+        ...condition.where,
+      }
+    }
     const recipes = await Recipe.findAll(condition);
-    const recipesCount = recipes?.map(recipe => recipe.dataValues)?.length || 0;
     res.status(200).json({
       message: 'Successfully retrieved a recipe',
       meta: {
