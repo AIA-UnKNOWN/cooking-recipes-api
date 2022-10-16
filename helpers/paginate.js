@@ -1,16 +1,13 @@
 module.exports = paginate = body => {
   const { pagination } = body || {};
   
-  let offset = pagination?.offset || 0;
-  let limit = pagination?.limit || 5;
+  const offset = pagination?.offset || 0;
+  const limit = pagination?.limit || 5;
   const recordsPerPage = limit - offset;
-  const prevOffset = offset - recordsPerPage;
-  const prevLimit = limit - recordsPerPage;
+  const prevOffset = offset - limit;
   let meta = {
-    nextOffset: offset + recordsPerPage,
-    nextLimit: limit + recordsPerPage,
-    prevOffset: prevOffset > 0 ? prevOffset : undefined,
-    prevLimit: prevLimit > 0 ? prevLimit : undefined,
+    nextOffset: offset + limit,
+    prevOffset,
   };
 
   return { offset, limit, recordsPerPage, meta };
